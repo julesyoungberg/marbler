@@ -24,17 +24,46 @@ const state = {
     gain: 0.5,
     lacunarity: 2.0,
     octaves: 5,
+    offsetAX: 0,
+    offsetAY: 0,
+    offsetBX: 4.2,
+    offsetBY: 1.3,
+    offsetCX: 1.7,
+    offsetCY: 3.2,
+    offsetDX: 4.3,
+    offsetDY: 2.8,
+    offsetX: 0,
+    offsetY: 0,
+    scale1: 3.0,
+    scale2: 3.0,
 };
 
 const gui = new dat.GUI();
 gui.add(state, 'animate');
-gui.addColor(state, 'color1');
-gui.addColor(state, 'color2');
-gui.addColor(state, 'color3');
-gui.addColor(state, 'color4');
 gui.add(state, 'gain', 0, 1);
 gui.add(state, 'lacunarity', 0, 3);
 gui.add(state, 'octaves', 1, 10, 1);
+gui.add(state, 'scale1', 1, 4);
+gui.add(state, 'scale2', 1, 4);
+
+const color = gui.addFolder('color');
+color.open();
+color.addColor(state, 'color1');
+color.addColor(state, 'color2');
+color.addColor(state, 'color3');
+color.addColor(state, 'color4');
+
+const offsets = gui.addFolder('offsets');
+offsets.add(state, 'offsetAX', 0, 8);
+offsets.add(state, 'offsetAY', 0, 8);
+offsets.add(state, 'offsetBX', 0, 8);
+offsets.add(state, 'offsetBY', 0, 8);
+offsets.add(state, 'offsetCX', 0, 8);
+offsets.add(state, 'offsetCY', 0, 8);
+offsets.add(state, 'offsetDX', 0, 8);
+offsets.add(state, 'offsetDY', 0, 8);
+offsets.add(state, 'offsetX', 0, 8);
+offsets.add(state, 'offsetY', 0, 8);
 
 function render(time: number) {
     twgl.resizeCanvasToDisplaySize(gl.canvas as HTMLCanvasElement);
@@ -49,7 +78,14 @@ function render(time: number) {
         gain: state.gain,
         lacunarity: state.lacunarity,
         octaves: state.octaves,
+        offset: [state.offsetX, state.offsetY],
+        offsetA: [state.offsetAX, state.offsetAY],
+        offsetB: [state.offsetBX, state.offsetBY],
+        offsetC: [state.offsetCX, state.offsetCY],
+        offsetD: [state.offsetDX, state.offsetDY],
         resolution: [gl.canvas.width, gl.canvas.height],
+        scale1: state.scale1,
+        scale2: state.scale2,
         time: time * 0.001,
     };
 

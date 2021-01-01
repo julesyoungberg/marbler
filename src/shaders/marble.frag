@@ -12,7 +12,14 @@ uniform vec3 color4;
 uniform float gain;
 uniform float lacunarity;
 uniform int octaves;
+uniform vec2 offset;
+uniform vec2 offsetA;
+uniform vec2 offsetB;
+uniform vec2 offsetC;
+uniform vec2 offsetD;
 uniform vec2 resolution;
+uniform float scale1;
+uniform float scale2;
 uniform float time;
 
 // Some useful functions
@@ -64,8 +71,8 @@ float snoise(vec2 v) {
                         dot(x2,x2)
                         ), 0.0);
 
-    m = m*m ;
-    m = m*m ;
+    m = m*m;
+    m = m*m;
 
     // Gradients:
     //  41 pts uniformly over a line, mapped onto a diamond
@@ -93,7 +100,7 @@ float fbm(vec2 p) {
     float freq = 1.0, amp = 0.5;
     float prev = 1.0;
     for(int i=0; i < octaves; i++) {
-        float n = snoise(p*freq) * 0.5 + 0.5;
+        float n = snoise(p * freq) * 0.5 + 0.5;
         sum += n * amp;
         // sum += n * amp * prev;  // scale by previous octave
         prev = n;
@@ -104,19 +111,16 @@ float fbm(vec2 p) {
 }
 
 float pattern(in vec2 p, out vec2 q, out vec2 r) {
-    float scale1 = 2.0;
-    float scale2 = 2.0;
     p *= scale1;
+    p += offset;
 
     float t = 0.0;
     if (animate) {
         t = time * 0.03;
     }
 
-    q = vec2(fbm(p + vec2(0.0, 0.0) + t * 0.4), fbm(p + vec2(5.2, 1.3) - t * 0.3));
-
-    r = vec2(fbm(p + scale2 * q + vec2(1.7, 9.2)), 
-             fbm(p + scale2 * q + vec2(8.3, 2.8)));
+    q = vec2(fbm(p + offsetA + t * 0.4), fbm(p + offsetB - t * 0.3));
+    r = vec2(fbm(p + scale2 * q + offsetC), fbm(p + scale2 * q + offsetD));
 
     return fbm(p + scale2 * r);
 }
