@@ -40,6 +40,8 @@ const state = {
     scale2: 3.0,
     scaleByPrev: false,
     sharpen: true,
+    timeScaleX: 0.4,
+    timeScaleY: 0.3,
 };
 
 const gui = new dat.GUI();
@@ -53,6 +55,8 @@ gui.add(state, 'lacunarity', 0, 3);
 gui.add(state, 'octaves', 1, 10, 1);
 gui.add(state, 'scale1', 1, 4);
 gui.add(state, 'scale2', 1, 4);
+gui.add(state, 'timeScaleX', 0, 1);
+gui.add(state, 'timeScaleY', 0, 1);
 
 const color = gui.addFolder('color');
 color.open();
@@ -99,6 +103,7 @@ function render(time: number) {
         scaleByPrev: state.scaleByPrev,
         sharpen: state.sharpen,
         time: time * 0.001,
+        timeScale: [state.timeScaleX, state.timeScaleY],
     };
 
     gl.useProgram(programInfo.program);

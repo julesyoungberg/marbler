@@ -25,6 +25,7 @@ uniform float scale2;
 uniform bool scaleByPrev;
 uniform bool sharpen;
 uniform float time;
+uniform vec2 timeScale;
 
 // Some useful functions
 vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -146,10 +147,10 @@ float pattern(in vec2 p, out vec2 q, out vec2 r) {
 
     float t = 0.0;
     if (animate) {
-        t = time * 0.03;
+        t = time * 0.1;
     }
 
-    q = vec2(fbm(p + offsetA + t * 0.4), fbm(p + offsetB - t * 0.3));
+    q = vec2(fbm(p + offsetA + t * timeScale.x), fbm(p + offsetB - t * timeScale.y));
     r = vec2(fbm(p + scale2 * q + offsetC), fbm(p + scale2 * q + offsetD));
 
     return fbm(p + scale2 * r);
