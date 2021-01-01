@@ -21,6 +21,9 @@ const state = {
     color2: [255, 255, 255],
     color3: [255, 255, 255],
     color4: [0, 0, 255],
+    gain: 0.5,
+    lacunarity: 2.0,
+    octaves: 5,
 };
 
 const gui = new dat.GUI();
@@ -29,6 +32,9 @@ gui.addColor(state, 'color1');
 gui.addColor(state, 'color2');
 gui.addColor(state, 'color3');
 gui.addColor(state, 'color4');
+gui.add(state, 'gain', 0, 1);
+gui.add(state, 'lacunarity', 0, 10);
+gui.add(state, 'octaves', 1, 10, 1);
 
 function render(time: number) {
     twgl.resizeCanvasToDisplaySize(gl.canvas as HTMLCanvasElement);
@@ -40,6 +46,9 @@ function render(time: number) {
         color2: state.color2.map(c => c / 255),
         color3: state.color3.map(c => c / 255),
         color4: state.color4.map(c => c / 255),
+        gain: state.gain,
+        lacunarity: state.lacunarity,
+        octaves: state.octaves,
         resolution: [gl.canvas.width, gl.canvas.height],
         time: time * 0.001,
     };

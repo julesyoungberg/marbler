@@ -9,6 +9,9 @@ uniform vec3 color1;
 uniform vec3 color2;
 uniform vec3 color3;
 uniform vec3 color4;
+uniform float gain;
+uniform float lacunarity;
+uniform int octaves;
 uniform vec2 resolution;
 uniform float time;
 
@@ -85,16 +88,11 @@ float snoise(vec2 v) {
     return 130.0 * dot(m, g);
 }
 
-#define OCTAVES 5
 float fbm(vec2 p) {
-    float lacunarity = 2.0;
-    float gain = 0.5;
-    float offset = 0.9;
-
     float sum = 0.0;
     float freq = 1.0, amp = 0.5;
     float prev = 1.0;
-    for(int i=0; i < OCTAVES; i++) {
+    for(int i=0; i < octaves; i++) {
         float n = snoise(p*freq) * 0.5 + 0.5;
         sum += n * amp;
         // sum += n * amp * prev;  // scale by previous octave
@@ -110,12 +108,12 @@ float pattern(in vec2 p, out vec2 q, out vec2 r) {
     float scale2 = 2.0;
     p *= scale1;
 
-    float offset = 0.0;
+    float t = 0.0;
     if (animate) {
-        offset = time * 0.03;
+        t = time * 0.03;
     }
 
-    q = vec2(fbm(p + vec2(0.0, 0.0) + offset), fbm(p + vec2(5.2, 1.3) + offset * 0.5));
+    q = vec2(fbm(p + vec2(0.0, 0.0) + t), fbm(p + vec2(5.2, 1.3) + t * 0.5));
 
     r = vec2(fbm(p + scale2 * q + vec2(1.7, 9.2)), 
              fbm(p + scale2 * q + vec2(8.3, 2.8)));
