@@ -17,10 +17,10 @@ const bufferInfo = createUnitQuad2D(gl);
 
 const state = {
     animate: true,
-    color1: [255, 0, 0],
+    color1: [125, 19, 19],
     color2: [255, 255, 255],
-    color3: [255, 255, 255],
-    color4: [0, 0, 255],
+    color3: [110, 110, 110],
+    color4: [255, 255, 255],
     gain: 0.5,
     lacunarity: 2.0,
     octaves: 5,
@@ -33,7 +33,7 @@ gui.addColor(state, 'color2');
 gui.addColor(state, 'color3');
 gui.addColor(state, 'color4');
 gui.add(state, 'gain', 0, 1);
-gui.add(state, 'lacunarity', 0, 10);
+gui.add(state, 'lacunarity', 0, 3);
 gui.add(state, 'octaves', 1, 10, 1);
 
 function render(time: number) {

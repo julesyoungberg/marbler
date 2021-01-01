@@ -113,7 +113,7 @@ float pattern(in vec2 p, out vec2 q, out vec2 r) {
         t = time * 0.03;
     }
 
-    q = vec2(fbm(p + vec2(0.0, 0.0) + t), fbm(p + vec2(5.2, 1.3) + t * 0.5));
+    q = vec2(fbm(p + vec2(0.0, 0.0) + t * 0.4), fbm(p + vec2(5.2, 1.3) - t * 0.3));
 
     r = vec2(fbm(p + scale2 * q + vec2(1.7, 9.2)), 
              fbm(p + scale2 * q + vec2(8.3, 2.8)));
