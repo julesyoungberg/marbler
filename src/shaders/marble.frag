@@ -10,7 +10,9 @@ uniform vec3 color2;
 uniform vec3 color3;
 uniform vec3 color4;
 uniform float gain;
+uniform bool invert;
 uniform float lacunarity;
+uniform int noiseMode;
 uniform int octaves;
 uniform vec2 offset;
 uniform vec2 offsetA;
@@ -20,6 +22,8 @@ uniform vec2 offsetD;
 uniform vec2 resolution;
 uniform float scale1;
 uniform float scale2;
+uniform bool scaleByPrev;
+uniform bool sharpen;
 uniform float time;
 
 // Some useful functions
@@ -95,18 +99,44 @@ float snoise(vec2 v) {
     return 130.0 * dot(m, g);
 }
 
+float getNoiseVal(vec2 p) {
+    float raw = snoise(p);
+
+    if (noiseMode == 1) {
+        return abs(raw);
+    }
+
+    return raw * 0.5 + 0.5;
+}
+
 float fbm(vec2 p) {
     float sum = 0.0;
-    float freq = 1.0, amp = 0.5;
+    float freq = 1.0;
+    float amp = 0.5;
     float prev = 1.0;
-    for(int i=0; i < octaves; i++) {
-        float n = snoise(p * freq) * 0.5 + 0.5;
+
+    for (int i = 0; i < octaves; i++) {
+        float n = getNoiseVal(p * freq);
+
+        if (invert) {
+            n = 1.0 - n;
+        }
+
+        if (sharpen) {
+            n = n * n;
+        }
+
         sum += n * amp;
-        // sum += n * amp * prev;  // scale by previous octave
+
+        if (scaleByPrev) {
+            sum += n * amp * prev;
+        }
+
         prev = n;
         freq *= lacunarity;
         amp *= gain;
     }
+
     return sum;
 }
 

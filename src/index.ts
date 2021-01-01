@@ -22,7 +22,9 @@ const state = {
     color3: [110, 110, 110],
     color4: [255, 255, 255],
     gain: 0.5,
+    invert: false,
     lacunarity: 2.0,
+    noiseMode: 'scale',
     octaves: 5,
     offsetAX: 0,
     offsetAY: 0,
@@ -36,10 +38,16 @@ const state = {
     offsetY: 0,
     scale1: 3.0,
     scale2: 3.0,
+    scaleByPrev: false,
+    sharpen: true,
 };
 
 const gui = new dat.GUI();
 gui.add(state, 'animate');
+gui.add(state, 'noiseMode', ['mirror', 'scale']);
+gui.add(state, 'invert');
+gui.add(state, 'sharpen');
+gui.add(state, 'scaleByPrev');
 gui.add(state, 'gain', 0, 1);
 gui.add(state, 'lacunarity', 0, 3);
 gui.add(state, 'octaves', 1, 10, 1);
@@ -76,7 +84,9 @@ function render(time: number) {
         color3: state.color3.map(c => c / 255),
         color4: state.color4.map(c => c / 255),
         gain: state.gain,
+        invert: state.invert,
         lacunarity: state.lacunarity,
+        noiseMode: state.noiseMode === 'scale' ? 0 : 1,
         octaves: state.octaves,
         offset: [state.offsetX, state.offsetY],
         offsetA: [state.offsetAX, state.offsetAY],
@@ -86,6 +96,8 @@ function render(time: number) {
         resolution: [gl.canvas.width, gl.canvas.height],
         scale1: state.scale1,
         scale2: state.scale2,
+        scaleByPrev: state.scaleByPrev,
+        sharpen: state.sharpen,
         time: time * 0.001,
     };
 
